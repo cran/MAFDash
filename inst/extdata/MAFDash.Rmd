@@ -1,0 +1,112 @@
+---
+title: "MAFDash"
+output:
+  flexdashboard::flex_dashboard:
+    source_code: embed
+    theme: yeti
+    orientation: rows
+    vertical_layout: scroll
+params:
+  maffile: NULL
+  titletext: "MAF Dash"
+  plot_list: NULL
+---
+
+```{r setup, include=FALSE}
+library(MAFDash)
+
+maf_file <- params$maffile
+title_text <- params$titletext
+
+all_plot_opts <- params$plot_list
+if (is.null(all_plot_opts)) {
+  all_plot_opts = list("summary_plot"=TRUE,
+                       "burden"=TRUE,
+                       "oncoplot"=TRUE,
+                       "cooccurence"=TRUE,
+                       # "other"="custom_image.pdf",
+                       "heatmap"=TRUE
+                       )
+}
+
+template_dir <- getwd()
+options(knitr.duplicate.label = "allow")
+
+maf <- NULL
+
+```
+
+
+```{r read-MAF-file, results="hide" }
+
+maf_data <- maf_file
+clinical_data <- NULL
+
+if (!is.null(maf_file)) {
+  if (class(maf_file)=="MAF") {
+    maf_data <- rbind(maf_file@data, maf_file@maf.silent)
+    clinical_data <- maf_file@clinical.data
+  }
+  maf <- maftools::read.maf(maf_data, clinicalData = clinical_data)
+}
+
+```
+
+```{r make-summary-table}
+summary_table_text=NULL
+if (!is.null(maf)) {
+  summ_template_name=file.path(template_dir, "summary_table.Rmd")
+  summary_table_text <- knitr::knit_expand(summ_template_name)
+}
+```
+`r paste(knitr::knit(text = paste(summary_table_text, collapse = '\n')))`
+
+Row {.tabset .tabset-fade data-height=800}
+-------------------------------------
+
+``` {r make-plot-tabs }
+# all_plot_opts = list("summary_plot"=TRUE,
+#                      # "burden"=TRUE,
+#                      # "oncoplot"=TRUE,
+#                      # "cooccurence"=TRUE,
+#                      # "heatmap"=TRUE,
+#                      "other"="~/Documents/my_tools/MAFdash/Rpackage/testing/custom_image.pdf"
+#                      )
+
+out <- lapply(names(all_plot_opts), function(plotname) {
+  plot_input <- all_plot_opts[[plotname]]
+  if (is.logical(plot_input) && plot_input) {
+    template_name=file.path(template_dir, paste0(plotname, ".Rmd"))
+    if (file.exists(template_name)) {
+      return_text <- knitr::knit_expand(template_name)
+    }
+  } else {
+    tab_text <- paste0("\n### ", plotname)
+    rchunk_text <- c("``` {r, out.width='100%', out.height='95%' }","```")
+    plot_text <- "print('Image not found')"
+    if (is.character(plot_input) && file.exists(plot_input)) {
+      plot_text <- paste0("knitr::include_graphics(all_plot_opts[['",plotname,"']])")
+    } else if (class(plot_input)[1] %in% c("gg","Heatmap")) {
+      plot_text <- paste0("print(all_plot_opts[['",plotname,"']])")
+    } else if (class(plot_input)[1] %in% c("plotly")) {
+      plot_text <- paste0("all_plot_opts[['",plotname,"']]")
+    }
+    return_text <- paste(tab_text, rchunk_text[1], plot_text, rchunk_text[2], sep="\n",collapse="\n")
+  }
+  return(return_text)
+  
+})
+```
+`r paste(knitr::knit(text = paste(out, collapse = '\n')))`
+
+-------------------------------------
+
+```{r make-variant-table}
+var_table_text=NULL
+if (!is.null(maf)) {
+  vartbl_template_name=file.path(template_dir, "variant_table.Rmd")
+  var_table_text <- knitr::knit_expand(vartbl_template_name)
+}
+```
+`r paste(knitr::knit(text = paste(var_table_text, collapse = '\n')))`
+
