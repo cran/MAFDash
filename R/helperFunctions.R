@@ -3,6 +3,7 @@ utils::globalVariables(c(".", ":=", "Tumor_Sample_Barcode",
                          "Hugo_Symbol", "Variant_Classification"))
 #' A function to detect MAF genome
 #' @description A function to detect MAF genome
+#' @author Mayank Tandon, Ashish Jain
 #' @param maf The MAF object
 #' @export
 #' @return A list containing the genome information
@@ -22,6 +23,7 @@ utils::globalVariables(c(".", ":=", "Tumor_Sample_Barcode",
 #' @importFrom pheatmap pheatmap
 #' @importFrom plotly plot_ly ggplotly
 #' @importFrom dplyr mutate select all_of
+#' @importFrom reshape2 dcast
 
 detectMAFGenome<-function(maf){
   ### Add checks for the conditions
@@ -55,6 +57,7 @@ detectMAFGenome<-function(maf){
 ### Adapted from maftools: https://github.com/PoisonAlien/maftools/blob/master/R/oncomatrix.R
 #' Creates matrix for oncoplot
 #' @description Creates matrix for oncoplot from maf file
+#' @author Mayank Tandon, Ashish Jain
 #' @param maf The MAF object
 #' @param g g
 #' @param add_missing add_missing
@@ -104,7 +107,7 @@ createOncoMatrix = function(maf, g = NULL, add_missing = FALSE){
     subMaf[, Hugo_Symbol := factor(x = Hugo_Symbol, levels = g)]
   }
 
-  oncomat = data.table::dcast(data = subMaf[,.(Hugo_Symbol, Variant_Classification, Tumor_Sample_Barcode)], formula = Hugo_Symbol ~ Tumor_Sample_Barcode,
+  oncomat = reshape2::dcast(data = subMaf[,.(Hugo_Symbol, Variant_Classification, Tumor_Sample_Barcode)], formula = Hugo_Symbol ~ Tumor_Sample_Barcode,
                               fun.aggregate = function(x){
                                 x = unique(as.character(x))
                                 xad = x[x %in% c('Amp', 'Del')]
@@ -198,6 +201,7 @@ createOncoMatrix = function(maf, g = NULL, add_missing = FALSE){
 
 #' Make variant table from maf file
 #' @description Make variant table from maf file
+#' @author Mayank Tandon, Ashish Jain
 #' @param maf The MAF object
 #' @param use_syn Whether or not to include synonymous variants (default is FALSE, i.e. returns non-synonymous mutations only)
 #' @param extra_cols Vector of column names to include from the MAF file.  If it's a named vector, the names will be used in the output table.
@@ -210,7 +214,7 @@ createOncoMatrix = function(maf, g = NULL, add_missing = FALSE){
 #' variantTable<-generateVariantTable(read.maf(maf))
 generateVariantTable <- function(maf, use_syn=FALSE, extra_cols=c()) {
   ### Add checks for the conditions
-  maf.filter <- ensurer::ensure_that(maf,
+  maf <- ensurer::ensure_that(maf,
                               !is.null(.) && (class(.) == "MAF"),
                               err_desc = "Please enter correct MAF object")
   use_syn <- ensurer::ensure_that(use_syn,
@@ -276,7 +280,7 @@ generateVariantTable <- function(maf, use_syn=FALSE, extra_cols=c()) {
   output_cols <- colnames(output_data)[match(cols_for_table, colnames(output_data), nomatch=0)]
   not_output <- cols_for_table[!cols_for_table %in% output_cols]
   if (length(not_output) > 0) {
-    warning(paste0("Not outputting these columns: ", paste(not_output, collapse=", ")))
+    message(paste0("Not outputting these columns: ", paste(not_output, collapse=", ")))
   }
   variant_info <- as.data.frame(output_data)[,output_cols]
   colnames(variant_info) <- names(cols_for_table)[match(colnames(variant_info),cols_for_table)]
@@ -285,6 +289,7 @@ generateVariantTable <- function(maf, use_syn=FALSE, extra_cols=c()) {
 
 #' Compute exome coverage from a region file
 #' @description This function will take a bed file, and return the sum of the lengths of unique regions
+#' @author Mayank Tandon, Ashish Jain
 #' @param targets_bed_file Path to a bed file with exome target regions
 #' @param out_file A file name to which the number of covered bases will be written, instead of returning the value
 #' @export
@@ -328,9 +333,10 @@ compute_exome_coverage <- function(targets_bed_file, out_file=NULL) {
 
 #' Function to the extact the Gene symbol from the input genes
 #' @description Function to the extact the Gene symbol from the input genes
+#' @author Mayank Tandon, Ashish Jain
 #' @param genes_arg genes_arg
-#' @export
 #' @return A character vector containing the list of genes with gene symbols
+#' @noRd
 #' @examples
 #' library(MAFDash)
 #' geneSelectParser()
@@ -374,6 +380,7 @@ geneSelectParser <- function(genes_arg=NULL) {
 
 #' Make the annotation data frame from the TCGA clinical dataset
 #' @description This function creates a annotation data frame from the TCGA clinical dataset
+#' @author Mayank Tandon, Ashish Jain
 #' @param my_clin_dat Clinical dataset in a data frame
 #' @param names_to_match The list containing the matched patient's name
 #' @param my_colors my_colors
@@ -447,6 +454,7 @@ make_column_annotation <- function(my_clin_dat, names_to_match, my_colors=NULL) 
 
 #' Returns the colors for each mutation
 #' @description This function returns the colors for each mutation
+#' @author Mayank Tandon, Ashish Jain
 #' @noRd
 my_mutation_colors <- function() {
   mutation_colors <- c(Nonsense_Mutation="#ad7aff",Missense_Mutation="#377EB8",Frame_Shift_Del="#4DAF4A",
@@ -459,6 +467,7 @@ my_mutation_colors <- function() {
 
 #' Returns the mutation colors for oncoplot function
 #' @description This function returns the mutation colors for oncoplot function
+#' @author Mayank Tandon, Ashish Jain
 #' @noRd
 oncoplot_annotation_func <- function() {
 
