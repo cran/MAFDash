@@ -1,7 +1,7 @@
 Package: MAFDash
 Type: Package
 Title: Create an HTML Dashboard to Visualize Data from MAF File
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person("Ashish", "Jain", role = c("aut", "cre"), email = "jain.ashishjain1@gmail.com"),
     person("Mayank", "Tandon", role = c("aut"), email = "mtandon09@gmail.com"),
@@ -29,10 +29,10 @@ Suggests: jsonlite
 Encoding: UTF-8
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2022-02-03 17:27:18 UTC; jaina13
+Packaged: 2022-03-31 17:06:19 UTC; jaina13
 Author: Ashish Jain [aut, cre],
   Mayank Tandon [aut],
   Frederick National Laboratory For Cancer Research [cph]
 Maintainer: Ashish Jain <jain.ashishjain1@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-02-04 12:50:05 UTC
+Date/Publication: 2022-04-01 07:20:08 UTC

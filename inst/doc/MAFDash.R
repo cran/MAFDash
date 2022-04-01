@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 #  # Download MAF data from TCGA
 #  CancerCode <- c("ACC","UVM")
 #  inputFolderPath <- tempdir() ## This folder will be created if it doesn't exist
-#  maf <- getMAFdataTCGA(cancerCode = CancerCode, outputFolder = inputFolderPath)
+#  #maf <- getMAFdataTCGA(cancerCode = CancerCode, outputFolder = inputFolderPath)
 
 ## ----eval=TRUE----------------------------------------------------------------
 library(MAFDash)
@@ -110,45 +110,46 @@ l$tcga_compare_plot
 #                  outputFileName = html_filename,
 #                  outputFileTitle = "Iris")
 
-## ----eval=TRUE----------------------------------------------------------------
-library(MAFDash)
-library(TCGAbiolinks)
+## ----eval=FALSE---------------------------------------------------------------
+#  library(MAFDash)
+#  library(TCGAbiolinks)
+#  
+#  tcga_code <- c("ACC","UVM")
+#  #inputFolderPath <- paste0(tempdir()) ## This folder will be created if it doesn't exist
+#  caller = "mutect2"
+#  title_label = paste0("TCGA-",tcga_code)
+#  
+#  #maf_files <- getMAFdataTCGA(tcga_code,outputFolder = tempdir(),variant_caller = caller)
 
-tcga_code <- c("ACC","UVM")
-#inputFolderPath <- paste0(tempdir()) ## This folder will be created if it doesn't exist 
-caller = "mutect2"
-title_label = paste0("TCGA-",tcga_code)
+## ----eval=FALSE---------------------------------------------------------------
+#  # tcga_clinical <- getTCGAClinicalAnnotation#TCGAbiolinks::GDCquery_clinic(project = paste0("TCGA-",tcga_code), type = "clinical")
+#  # tcga_clinical$Tumor_Sample_Barcode <- tcga_clinical$submitter_id
+#  defaultW <- getOption("warn")
+#  options(warn = -1)
+#  tcga_clinical<-getTCGAClinicalAnnotation(cancerCodes = tcga_code)
+#  options(warn = defaultW)
 
-maf_files <- getMAFdataTCGA(tcga_code,outputFolder = tempdir(),variant_caller = caller)
+## ----eval=FALSE---------------------------------------------------------------
+#  #maf_files<- system.file("extdata", "tcga_laml.maf.gz", package = "maftools")
+#  filtered_mafdata <- do.call("rbind",lapply(maf_files, function(maf_file){filter_maf_chunked(maf_file)}))
 
-## ----eval=TRUE----------------------------------------------------------------
-# tcga_clinical <- getTCGAClinicalAnnotation#TCGAbiolinks::GDCquery_clinic(project = paste0("TCGA-",tcga_code), type = "clinical")
-# tcga_clinical$Tumor_Sample_Barcode <- tcga_clinical$submitter_id
-defaultW <- getOption("warn")
-options(warn = -1)
-tcga_clinical<-getTCGAClinicalAnnotation(cancerCodes = tcga_code)
-options(warn = defaultW)
+## ----eval=FALSE---------------------------------------------------------------
+#  filtered_maf <- read.maf(filtered_mafdata, clinicalData = tcga_clinical$annodata,verbose = FALSE)
+#  annotation_colors <- getTCGAClinicalColors(ageRange = range(tcga_clinical$annodata$age_at_diagnosis, na.rm=T))
 
-## ----eval=TRUE----------------------------------------------------------------
-filtered_mafdata <- do.call("rbind",lapply(maf_files, function(maf_file){filter_maf_chunked(maf_file)}))
+## ----eval=FALSE---------------------------------------------------------------
+#  custom_onco <- generateOncoPlot(filtered_maf,
+#                                  add_clinical_annotations = names(annotation_colors),
+#                                  clin_data_colors = annotation_colors)
+#  custom_onco
 
-## ----eval=TRUE----------------------------------------------------------------
-filtered_maf <- read.maf(filtered_mafdata, clinicalData = tcga_clinical$annodata,verbose = FALSE)
-annotation_colors <- getTCGAClinicalColors(ageRange = range(tcga_clinical$annodata$age_at_diagnosis, na.rm=T))
+## ----eval=FALSE---------------------------------------------------------------
+#  tcgaComparePlot<-generateTCGAComparePlot(maf = filtered_maf, cohortName = "test")
+#  tcgaComparePlot$tcga_compare_plot
 
-## ----eval=TRUE----------------------------------------------------------------
-custom_onco <- generateOncoPlot(filtered_maf, 
-                                add_clinical_annotations = names(annotation_colors), 
-                                clin_data_colors = annotation_colors)
-custom_onco
-
-## ----eval=TRUE----------------------------------------------------------------
-tcgaComparePlot<-generateTCGAComparePlot(maf = filtered_maf, cohortName = "test")
-tcgaComparePlot$tcga_compare_plot
-
-## ----eval=TRUE----------------------------------------------------------------
-#ribbonplot_file <- file.path(getwd(),"ribbon.pdf")
-generateRibbonPlot(filtered_maf,save_name = NULL)
+## ----eval=FALSE---------------------------------------------------------------
+#  #ribbonplot_file <- file.path(getwd(),"ribbon.pdf")
+#  generateRibbonPlot(filtered_maf,save_name = NULL)
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  customplotlist <- list("summary_plot"=T,

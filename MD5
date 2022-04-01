@@ -1,4 +1,4 @@
-aa0f94b04c4295a7e5a2a6a256a23bd8 *DESCRIPTION
+51d59df36d239b407b496bab03436078 *DESCRIPTION
 e36c5832383c6938fffd650e85a9adcd *NAMESPACE
 b2c407fa81259c17f6cf83937416272c *R/filterMAF.R
 31fadff62e3387b42fcbef7f963d6ff3 *R/generateBurdenPlot.R
@@ -9,13 +9,13 @@ b3ad6ef1c2e8b6a3cd211f6020c466b1 *R/generateOverlapPlot.R
 9e7efc873a6133ac0a577cb861909bcb *R/generateTCGAComparePlot.R
 5929cfb9fc587d9368b35c198cb42089 *R/generateTiTvPlot.R
 56a26d48785434c7246fec9fde81e29b *R/getMAFDashboard.R
-fcfa42a28981cd23e235af98bfc2de03 *R/getMAFDataTCGA.R
-ba83d0f59a762b763c39e2ca254c4c5b *R/helperFunctions.R
+15fc29feceac3f5142df1b657bd26c40 *R/getMAFDataTCGA.R
+b38afc6b37ba8055a09c6f49fb813ba3 *R/helperFunctions.R
 f5a8813a52dd708206a1aecabff60e89 *README.md
 88d2fc3a8eef7c0f855230564855596a *build/vignette.rds
-b2c387f1360f6c1e1b77a14df18c13ca *inst/doc/MAFDash.R
-862df8c33f256e7fd3f5b3c6143b32cc *inst/doc/MAFDash.Rmd
-3751907b11e42fdecc08f5e736f3a5d3 *inst/doc/MAFDash.html
+ee3fcebe256ed2ba908daa2a1e4c2d4e *inst/doc/MAFDash.R
+7fcddbd70ee03b2d5535dbbd7f3756be *inst/doc/MAFDash.Rmd
+b42da51ff2b9f5d3cb6cfcfe043fe6a9 *inst/doc/MAFDash.html
 5d01abe4e4c4c50600f777f04b3a0e2f *inst/extdata/MAFDash.Rmd
 b8471a26715139e0eae3fc4b68b46e41 *inst/extdata/burden.Rmd
 daba4fa0391b0225d670f83fecc78496 *inst/extdata/cooccurence.Rmd
@@ -42,7 +42,7 @@ a74bcda872dbfda1ddeda80d43f8d21b *man/generateRibbonPlot.Rd
 24f0eab660e5749dc39bb9cda2313f1e *man/generateTiTvPlot.Rd
 8951081297b63c1e678a6fd5a91c7011 *man/generateVariantTable.Rd
 0e4b836333315720ece5377d50b3a52f *man/getMAFDashboard.Rd
-740bd705fc1545d96cf87a6c9cc1ccf7 *man/getMAFdataTCGA.Rd
+680e02e61ea5d5dcfff442a5ac7a70f1 *man/getMAFdataTCGA.Rd
 5effc569c3e8340814e89954967dc749 *man/getTCGAClinicalAnnotation.Rd
 216ec82acbd651a0ae3b236f76dba302 *man/getTCGAClinicalColors.Rd
-862df8c33f256e7fd3f5b3c6143b32cc *vignettes/MAFDash.Rmd
+7fcddbd70ee03b2d5535dbbd7f3756be *vignettes/MAFDash.Rmd
